@@ -6,7 +6,7 @@
 /*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 00:34:18 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/15 17:10:55 by lenovo           ###   ########.fr       */
+/*   Updated: 2025/04/16 01:58:16 by lenovo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	send_symbol(const pid_t server,const char c)
 		while (!stop)
 		{
 			send_bit(server, bit);
-			usleep(500);
+			usleep(100000);
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:27:35 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/15 21:30:13 by lenovo           ###   ########.fr       */
+/*   Updated: 2025/04/16 01:51:03 by lenovo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,33 +22,43 @@ void	clear_content(void *content)
 }
 
 
-
-int	printing_behavior(t_list *client)
+void	find_and_delete_client(t_list *client)
 {
-	char	*temp;
-	t_list	*next;
+	t_list	*pre;
 
 	if (client == clients)
 	{
-		if (!ft_strncmp((((t_data *)(client->content))->text), "", 1))
-		{
-			ft_putstr_fd(((t_data *)(client->content))->text, 1);
-			clear_content(client->content);
-			((t_data *)(client->content))->text = ft_strdup("");
-		}
-		if (((t_data *)(client->content))->symbol[0] == '\0')
-		{
-			ft_putchar_fd('\n', 1);
-			next = clients->next;
-			ft_lstdelone(client, clear_content);
-			clients = next;
-		}
-		else
-			ft_putchar_fd(((t_data *)(client->content))->symbol[0], 1);
+		clients = clients->next;
+		//ft_lstdelone(client, clear_content);
 	}
 	else
 	{
-		temp = ft_strjoin(((t_data *)(client->content))->symbol, ((t_data *)(client->content))->text);
+		pre = clients;
+		while (pre && pre->next != client)
+			pre = pre->next;
+		if (pre && pre->next == client)
+		{
+			pre->next = client->next;
+			//ft_lstdelone(client, clear_content);
+		}
+	}
+}
+
+
+int	printing_behavior(t_list *client)
+{
+	char *temp;
+
+	if (((t_data *)(client->content))->symbol[0] == '\0')
+	{
+		ft_putstr_fd(((t_data *)(client->content))->text, 1);
+		ft_putchar_fd('\n', 1);
+		find_and_delete_client(client);
+	}
+	else
+	{
+		temp = ft_strjoin(((t_data *)(client->content))->text,
+							((t_data *)(client->content))->symbol);
 		if (!temp)
 			return (0);
 		free(((t_data *)(client->content))->text);
@@ -56,6 +66,7 @@ int	printing_behavior(t_list *client)
 	}
 	return (1);
 }
+
 
 
 
@@ -84,7 +95,7 @@ t_list	*get_client(pid_t pid)
 	client_data->symbol[1] = '\0';
 	new_client = ft_lstnew(client_data);
 	if (!new_client)
-		return (NULL);
+		return (free(client_data), NULL);
 	ft_lstadd_front(&clients, new_client);
 	return (new_client);
 }
@@ -108,7 +119,7 @@ void	signal_handler(int signum, siginfo_t *info, void *context)
 		((t_data *)(client->content))->symbol[0] = 0;
 	}
 	kill(info->si_pid, SIGUSR1);
-	usleep(100);
+	usleep(50);
 }
 
 
