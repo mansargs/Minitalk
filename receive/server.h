@@ -6,7 +6,7 @@
 /*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:21:35 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/12 14:27:29 by lenovo           ###   ########.fr       */
+/*   Updated: 2025/04/15 21:22:11 by lenovo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,13 @@
 # include <sys/types.h>
 # include <signal.h>
 # include "../Libft/libft.h"
+
+typedef struct s_server
+{
+	pid_t	cid;
+	char	symbol[2];
+	char	bit_count;
+	char	*text;
+}	t_data;
 
 #endif
