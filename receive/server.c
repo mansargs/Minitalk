@@ -6,7 +6,7 @@
 /*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:27:35 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/16 01:51:03 by lenovo           ###   ########.fr       */
+/*   Updated: 2025/04/16 18:17:45 by lenovo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,10 @@
 
 t_list	*clients = NULL;
 
-
-
 void	clear_content(void *content)
 {
 	free(((t_data *)(content))->text);
 }
-
 
 void	find_and_delete_client(t_list *client)
 {
@@ -53,6 +50,8 @@ int	printing_behavior(t_list *client)
 	{
 		ft_putstr_fd(((t_data *)(client->content))->text, 1);
 		ft_putchar_fd('\n', 1);
+		kill(((t_data *)(client->content))->cid,SIGUSR2);
+		usleep(20);
 		find_and_delete_client(client);
 	}
 	else

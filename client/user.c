@@ -6,7 +6,7 @@
 /*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 00:34:18 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/16 01:58:16 by lenovo           ###   ########.fr       */
+/*   Updated: 2025/04/16 18:13:00 by lenovo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ void	reply_from_server(int sig, siginfo_t *info, void *context)
 	if (sig == SIGUSR1)
 		stop = 1;
 	else if(sig == SIGUSR2)
-		stop = 2;
+	{
+		ft_putstr_fd("\nThe text has been successfully delivered.\n", 1);
+		exit(EXIT_SUCCESS);
+	}
 }
 
 void setup_handler()
@@ -48,7 +51,6 @@ void setup_handler()
 
 	sa.sa_sigaction = reply_from_server;
 	sa.sa_flags = SA_SIGINFO;
-
 
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
@@ -61,6 +63,11 @@ void	send_bit(const pid_t server,const char bit)
 		kill (server, SIGUSR1);
 	else
 		kill (server, SIGUSR2);
+	if (errno == ESRCH)
+	{
+		ft_putstr_fd("Unfortunately, the connection to the server was lost.\n", 1);
+		exit(EXIT_FAILURE);
+	}
 }
 
 void	send_symbol(const pid_t server,const char c)

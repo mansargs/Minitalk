@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Save the path to the client program
 CLIENT="./user"
 
 # Check if client executable exists
@@ -9,36 +8,122 @@ if [ ! -f "$CLIENT" ]; then
     exit 1
 fi
 
-# Get server PID (must be running already)
 read -p "Enter your SERVER PID: " SERVER_PID
 
-# Check if PID is valid
 if ! kill -0 "$SERVER_PID" 2>/dev/null; then
     echo "Error: Server with PID $SERVER_PID is not running."
     exit 1
 fi
 
-# Define test messages with Unicode and longer content
+# Define 100 different messages
 messages=(
-    "🌐 This is a transmission from the International Space Research Station 🛰️ orbiting Earth at 7.66 km/s. All systems are nominal. Atmospheric scans show no anomalies, and our crew of 12 is safe and well. 🌌 Sending greetings to all connected nodes! 🌍👩‍🚀👨‍🚀"
-    "📡📶 Incoming data stream from Deep Space Probe ✨ Voyager-9: Particle density measurements, magnetic field data, and radiation levels are being uploaded at 128 Mbps. 👨‍🔬 Please verify checksum and confirm successful receipt of data blocks 0241–0287. ✅🧬"
-    "🚀 Mission Log Entry #3482 — Commander Rhea reporting: We have officially entered the orbit of Kepler-452b. The exoplanet’s terrain appears mountainous with traces of ice caps. 🌋🗻 Our drones are being deployed for surface analysis. 🌡️📷"
-    "🔒 Security Alert! Unrecognized access attempt detected from IP range 🌐 192.52.108.44/27. 🚨 Immediate lockdown protocols have been initiated. Please confirm the legitimacy of this device using biometric authentication or security token verification. 🔐👁️"
-    "🎮 Player 0782 completed the Hidden Quest: 'The Lantern of Myths' 🔦 in record time! Total XP gained: 6,720. Loot acquired: Enchanted Bow 🏹, 4x Mana Elixir 💧, and a mysterious rune stone 🪨. Achievements unlocked: 'Seeker of Shadows', 'Speed Demon'. 🏆"
-    "📊 Network Monitoring Update: Node-27 has reported packet loss exceeding 12% over the last 15 minutes. 📉 Traceroute diagnostics in progress. Potential causes: 🧱 firewall misconfig, 🌩️ unstable routing path, or 🐞 firmware bug. Awaiting engineering input..."
-    "🎓 Welcome to the Intergalactic Linguistics Symposium 2297 🪐 — Today's keynote by Dr. Axara Zyy: 'The Semantics of Silence in Non-Phonetic Civilizations'. Topics include: 👄 telepathic grammar, ✨ quantum syntax, and 🌀 zero-verbal negotiation strategies."
-    "📦 Archive Log: Artifact #992A-TQ recovered from ruins beneath ocean trench 🌊 near coordinates 27.3°S, 68.1°W. Composition: unknown metal alloy. Inscriptions: non-linear script. Current location: Deep Containment Vault B-3. Clearance Level: Ω required. 🧊🔍"
-    "🌲🦉 Wilderness Beacon Signal: Expedition Team Alpha has reached the northern perimeter of Bio-Zone Delta. Biodiversity index has surpassed expectations. Species logged: 72, including previously undocumented flora with bioluminescent properties. 🌱✨"
-    "📅 Historical Upload Initiated — Year 2487, Unified Earth Archive: 'The Day the Skies Went Dark'. 🕯️ A full retelling of the solar flare event, its impact on Earth's magnetosphere, and the 42-hour global blackout that followed. Primary source logs restored."
+"Message 1: Hello there!"
+"Message 2: Just checking in, hope everything's going well."
+"Message 3: The sun is shining and it’s a beautiful day!"
+"Message 4: Bash scripting is pretty powerful, huh?"
+"Message 5: Have you tried debugging with echo statements?"
+"Message 6: Keep your spirits high and code clean!"
+"Message 7: Server communication test in progress."
+"Message 8: A watched pot never boils — unless you're multitasking."
+"Message 9: Let's see if this message makes it through."
+"Message 10: Can you read me, server?"
+"Message 11: This is a longer message to test buffer handling properly."
+"Message 12: How many characters can we send before it breaks?"
+"Message 13: Unicode: 🌍🚀✨"
+"Message 14: The quick brown fox jumps over the lazy dog."
+"Message 15: Stay hydrated and take breaks while coding!"
+"Message 16: Test message sixteen coming through."
+"Message 17: Ping pong! Just bouncing messages around."
+"Message 18: This one’s for science."
+"Message 19: The matrix has you... follow the white rabbit."
+"Message 20: 🧪 Test message number twenty with emojis."
+"Message 21: This is an important test to see if messages are received in order."
+"Message 22: Random thoughts make great test cases."
+"Message 23: Don't forget to check your semicolons."
+"Message 24: The cake is a lie."
+"Message 25: Sending a short burst now."
+"Message 26: Another ping in the timeline."
+"Message 27: Can you handle this speed?"
+"Message 28: Client #28 reporting in."
+"Message 29: This is going smoother than expected."
+"Message 30: Debugging makes perfect."
+"Message 31: What happens if we flood it?"
+"Message 32: Are you still with me?"
+"Message 33: Almost a third of the way there!"
+"Message 34: Hello world, again."
+"Message 35: This is your friendly neighborhood tester."
+"Message 36: Is it okay if I send more?"
+"Message 37: Checking throughput limits."
+"Message 38: High-volume message traffic incoming."
+"Message 39: Let’s overload the buffer. Just kidding."
+"Message 40: Server, you awake?"
+"Message 41: Just keep sending, just keep sending."
+"Message 42: The answer to life, the universe and everything."
+"Message 43: Simulating network chatter."
+"Message 44: Quick test to ensure stability."
+"Message 45: We’re halfway through."
+"Message 46: Buffer management is key."
+"Message 47: Clean, compact code = less stress."
+"Message 48: Almost there."
+"Message 49: This is only a test."
+"Message 50: Halfway mark!"
+"Message 51: Now begins the second half."
+"Message 52: Try not to crash the server."
+"Message 53: Efficiency check in progress."
+"Message 54: We do a little scripting."
+"Message 55: Every message matters."
+"Message 56: Unique message ID 56."
+"Message 57: No two messages are alike!"
+"Message 58: Consider this a stress test."
+"Message 59: Fire and forget!"
+"Message 60: If this works, we’re golden."
+"Message 61: Another successful dispatch."
+"Message 62: No errors yet."
+"Message 63: Code smarter, not harder."
+"Message 64: Background jobs galore."
+"Message 65: Keep your logs clean."
+"Message 66: Test message with a quote: “Stay strong.”"
+"Message 67: Wonder if it’s still holding up?"
+"Message 68: I believe in you, little server."
+"Message 69: Things are heating up!"
+"Message 70: We're on the home stretch!"
+"Message 71: Just another data packet."
+"Message 72: Closing in on 100!"
+"Message 73: Tests like these make good practice."
+"Message 74: Server seems happy."
+"Message 75: Testing emoji load 🐧"
+"Message 76: Long message time — this one goes on a bit more than the others to test larger buffer scenarios."
+"Message 77: If it breaks, we learn."
+"Message 78: Calm before the storm."
+"Message 79: Messages are still unique, promise!"
+"Message 80: Almost at the end!"
+"Message 81: UTF-8 💯 test message."
+"Message 82: This one’s special… just because."
+"Message 83: And then there were 83."
+"Message 84: You made it this far!"
+"Message 85: Keep calm and send more."
+"Message 86: It's not a bug, it's a feature!"
+"Message 87: Who’s counting? Oh, we are."
+"Message 88: Don't panic."
+"Message 89: Just a little more now."
+"Message 90: Big number energy."
+"Message 91: Echoes in the code."
+"Message 92: Nearly full capacity!"
+"Message 93: Load testing like champs."
+"Message 94: Almost... there..."
+"Message 95: Test storm incoming."
+"Message 96: Few more to go!"
+"Message 97: It’s been a wild ride."
+"Message 98: Here comes another!"
+"Message 99: Penultimate ping."
+"Message 100: Final message — we did it!"
 )
 
-
-# Launch each client in the background
-for msg in "${messages[@]}"
-do
-    echo "Sending: \"$msg\""
-    $CLIENT "$SERVER_PID" "$msg" &
+# Send all 100 messages in parallel
+for i in "${!messages[@]}"; do
+    echo "Sending #$((i+1)): ${messages[$i]}"
+    $CLIENT "$SERVER_PID" "${messages[$i]}" &
 done
 
-# Wait for all background processes to finish
-echo "All clients finished."
+wait
+echo "✅ All 100 unique clients finished."
