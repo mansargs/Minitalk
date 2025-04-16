@@ -6,7 +6,7 @@
 /*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:27:35 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/16 18:17:45 by lenovo           ###   ########.fr       */
+/*   Updated: 2025/04/16 20:44:00 by lenovo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,73 +16,77 @@ t_list	*clients = NULL;
 
 void	clear_content(void *content)
 {
-	free(((t_data *)(content))->text);
+	if (!content)
+		return;
+	free(((t_data *)content)->text);
+	free(content);
 }
 
-void	find_and_delete_client(t_list *client)
+void	find_and_delete_client(t_list **client_ptr)
 {
 	t_list	*pre;
+	t_list	*client;
 
+	client = *client_ptr;
+	if (!client)
+		return;
 	if (client == clients)
-	{
 		clients = clients->next;
-		//ft_lstdelone(client, clear_content);
-	}
 	else
 	{
 		pre = clients;
 		while (pre && pre->next != client)
 			pre = pre->next;
 		if (pre && pre->next == client)
-		{
 			pre->next = client->next;
-			//ft_lstdelone(client, clear_content);
-		}
 	}
+	ft_lstdelone(client, clear_content);
+	*client_ptr = NULL;
 }
 
-
-int	printing_behavior(t_list *client)
+int	printing_behavior(t_list **client_ptr)
 {
-	char *temp;
+	char	*temp;
+	t_data	*data;
 
-	if (((t_data *)(client->content))->symbol[0] == '\0')
+	if (!client_ptr || !*client_ptr)
+		return (0);
+
+	data = (t_data *)((*client_ptr)->content);
+
+	if (data->symbol[0] == '\0')
 	{
-		ft_putstr_fd(((t_data *)(client->content))->text, 1);
+		ft_putstr_fd(data->text, 1);
 		ft_putchar_fd('\n', 1);
-		kill(((t_data *)(client->content))->cid,SIGUSR2);
+		kill(data->cid, SIGUSR2);
+		find_and_delete_client(client_ptr);
 		usleep(20);
-		find_and_delete_client(client);
 	}
 	else
 	{
-		temp = ft_strjoin(((t_data *)(client->content))->text,
-							((t_data *)(client->content))->symbol);
+		temp = ft_strjoin(data->text, data->symbol);
 		if (!temp)
 			return (0);
-		free(((t_data *)(client->content))->text);
-		((t_data *)(client->content))->text = temp;
+		free(data->text);
+		data->text = temp;
 	}
 	return (1);
 }
-
-
-
-
 
 t_list	*get_client(pid_t pid)
 {
 	t_list	*now;
 	t_list	*new_client;
+	t_data	*client_data;
 
 	now = clients;
-	while(now)
+	while (now)
 	{
-		if (((t_data *)(now->content))->cid == pid)
+		if (((t_data *)now->content)->cid == pid)
 			return (now);
 		now = now->next;
 	}
-	t_data *client_data = (t_data *)malloc(sizeof(t_data));
+	client_data = malloc(sizeof(t_data));
 	if (!client_data)
 		return (NULL);
 	client_data->text = ft_strdup("");
@@ -94,7 +98,7 @@ t_list	*get_client(pid_t pid)
 	client_data->symbol[1] = '\0';
 	new_client = ft_lstnew(client_data);
 	if (!new_client)
-		return (free(client_data), NULL);
+		return (free(client_data->text), free(client_data), NULL);
 	ft_lstadd_front(&clients, new_client);
 	return (new_client);
 }
@@ -102,34 +106,38 @@ t_list	*get_client(pid_t pid)
 void	signal_handler(int signum, siginfo_t *info, void *context)
 {
 	t_list	*client;
+	t_data	*data;
 
-	(void) context;
+	(void)context;
+
 	client = get_client(info->si_pid);
 	if (!client)
-		return ;
+		return;
+	data = (t_data *)(client->content);
 	if (signum == SIGUSR1)
-		((t_data *)(client->content))->symbol[0] |= (1 << (7 - ((t_data *)(client->content))->bit_count));
-	++((t_data *)(client->content))->bit_count;
-	if (((t_data *)(client->content))->bit_count == 8)
+		data->symbol[0] |= (1 << (7 - data->bit_count));
+	data->bit_count++;
+	if (data->bit_count == 8)
 	{
-		if (!printing_behavior(client))
-			return ;
-		((t_data *)(client->content))->bit_count = 0;
-		((t_data *)(client->content))->symbol[0] = 0;
+		if (!printing_behavior(&client))
+			return;
+		if (!client || !client->content)
+			return;
+		data = (t_data *)client->content;
+		data->bit_count = 0;
+		data->symbol[0] = 0;
 	}
-	kill(info->si_pid, SIGUSR1);
-	usleep(50);
+	if (client && client->content)
+	{
+		kill(info->si_pid, SIGUSR1);
+		usleep(50);
+	}
 }
 
-
-
-
-
-
-int	main ()
+int	main(void)
 {
-	pid_t server;
-	struct sigaction sa;
+	struct sigaction	sa;
+	pid_t				server;
 
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = signal_handler;
@@ -137,11 +145,8 @@ int	main ()
 	ft_putstr_fd("Server PID ", 1);
 	ft_putnbr_fd(server, 1);
 	ft_putchar_fd('\n', 1);
-
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	while (1)
-	{
 		pause();
-	}
 }
