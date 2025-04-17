@@ -6,7 +6,7 @@
 /*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:21:35 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/16 19:47:14 by lenovo           ###   ########.fr       */
+/*   Updated: 2025/04/17 11:48:22 by lenovo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@
 
 typedef struct s_server
 {
-	pid_t	cid;
-	char	symbol[2];
-	char	bit_count;
-	char	*text;
-}	t_data;
+	pid_t				cid;
+	char				symbol[2];
+	char				bit_count;
+	char				*text;
+	unsigned int		time;
+}						t_data;
 
 #endif

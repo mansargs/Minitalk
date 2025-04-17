@@ -6,7 +6,7 @@
 /*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:27:35 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/16 20:44:00 by lenovo           ###   ########.fr       */
+/*   Updated: 2025/04/17 18:10:15 by lenovo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void	signal_handler(int signum, siginfo_t *info, void *context)
 	if (!client)
 		return;
 	data = (t_data *)(client->content);
+	data->time = 0;
 	if (signum == SIGUSR1)
 		data->symbol[0] |= (1 << (7 - data->bit_count));
 	data->bit_count++;
@@ -134,13 +135,47 @@ void	signal_handler(int signum, siginfo_t *info, void *context)
 	}
 }
 
+void	dead_inactive_clients()
+{
+	t_list		*cli;
+	t_list		*prev;
+	t_data		*data;
+
+	cli = clients;
+	prev = NULL;
+	while (cli)
+	{
+		data = (t_data *) cli->content;
+		if (data->time > 150)
+		{
+			if (prev)
+				prev->next = cli->next;
+			else
+				clients = cli->next;
+			ft_putstr_fd("\nTimeout for PID ", 1);
+			ft_putnbr_fd(data->cid, 1);
+			write(1, "\n", 1);
+			ft_lstdelone(cli, clear_content);
+			if (prev)
+				cli = prev->next;
+			else
+				cli = clients;
+			continue;
+		}
+		prev = cli;
+		cli = cli->next;
+	}
+}
+
 int	main(void)
 {
 	struct sigaction	sa;
 	pid_t				server;
+	t_list				*cli;
 
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = signal_handler;
+	sigemptyset(&sa.sa_flags);
 	server = getpid();
 	ft_putstr_fd("Server PID ", 1);
 	ft_putnbr_fd(server, 1);
@@ -148,5 +183,15 @@ int	main(void)
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	while (1)
-		pause();
+	{
+		usleep(100000);
+		cli = clients;
+		while (cli)
+		{
+			((t_data *)(cli->content))->time++;
+			cli = cli->next;
+		}
+		dead_inactive_clients();
+		//pause();
+	}
 }

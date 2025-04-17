@@ -6,7 +6,7 @@
 /*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 00:34:18 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/16 18:13:00 by lenovo           ###   ########.fr       */
+/*   Updated: 2025/04/17 18:10:48 by lenovo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void setup_handler()
 
 	sa.sa_sigaction = reply_from_server;
 	sa.sa_flags = SA_SIGINFO;
+	sigemptyset(&sa.sa_mask);
 
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
