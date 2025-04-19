@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   user.h                                             :+:      :+:    :+:   */
+/*   ft_lstadd_front_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mansargs <mansargs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/12 00:34:40 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/12 14:09:41 by lenovo           ###   ########.fr       */
+/*   Created: 2025/01/27 20:30:08 by mansargs          #+#    #+#             */
+/*   Updated: 2025/01/27 20:30:09 by mansargs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef USER_H
-# define USER_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <errno.h>
-# include <sys/types.h>
-# include <signal.h>
-# include "../Libft/libft.h"
-
-#endif
+void	ft_lstadd_front(t_list **lst, t_list *new)
+{
+	if (new)
+	{
+		new->next = *lst;
+		*lst = new;
+	}
+}

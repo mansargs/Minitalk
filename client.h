@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.h                                           :+:      :+:    :+:   */
+/*   client.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/12 14:21:35 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/17 11:48:22 by lenovo           ###   ########.fr       */
+/*   Created: 2025/04/12 00:34:40 by lenovo            #+#    #+#             */
+/*   Updated: 2025/04/18 13:33:20 by lenovo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVER_H
-# define SERVER_H
+#ifndef CLIENT_H
+# define CLIENT_H
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -19,15 +19,6 @@
 # include <errno.h>
 # include <sys/types.h>
 # include <signal.h>
-# include "../Libft/libft.h"
-
-typedef struct s_server
-{
-	pid_t				cid;
-	char				symbol[2];
-	char				bit_count;
-	char				*text;
-	unsigned int		time;
-}						t_data;
+# include "libft/libft.h"
 
 #endif
