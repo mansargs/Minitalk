@@ -9,8 +9,8 @@ LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBFT_INC = -I$(LIBFT_DIR)
 
-SRC_SERVER = server.c
-SRC_CLIENT = client.c
+SRC_SERVER = server.c server_utils.c
+SRC_CLIENT = client.c client_signal_handler.c
 
 OBJ_SERVER = $(SRC_SERVER:.c=.o)
 OBJ_CLIENT = $(SRC_CLIENT:.c=.o)

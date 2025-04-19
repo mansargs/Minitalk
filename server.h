@@ -6,14 +6,13 @@
 /*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:21:35 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/19 14:31:26 by lenovo           ###   ########.fr       */
+/*   Updated: 2025/04/19 15:37:25 by lenovo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_H
 # define SERVER_H
 
-# include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <errno.h>
@@ -31,5 +30,9 @@ typedef struct s_server
 }						t_data;
 
 extern t_list	*g_clients;
+
+void	clear_content(void *content);
+t_list	*get_client(const pid_t pid);
+int		printing_behavior(t_list **client_ptr);
 
 #endif

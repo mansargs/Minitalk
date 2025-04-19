@@ -6,7 +6,7 @@
 /*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 13:45:07 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/19 14:26:41 by lenovo           ###   ########.fr       */
+/*   Updated: 2025/04/19 14:50:36 by lenovo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	clear_content(void *content)
 	free(((t_data *)content)->text);
 }
 
-void	find_and_delete_client(t_list **client_ptr)
+static void	find_and_delete_client(t_list **client_ptr)
 {
 	t_list	*pre;
 	t_list	*client;
@@ -68,7 +68,7 @@ int	printing_behavior(t_list **client_ptr)
 	return (1);
 }
 
-t_data	*initialize_content(pid_t pid)
+static t_data	*initialize_content(pid_t pid)
 {
 	t_data	*client_data;
 
@@ -85,7 +85,7 @@ t_data	*initialize_content(pid_t pid)
 	return (client_data);
 }
 
-t_list	*get_client(pid_t pid)
+t_list	*get_client(const pid_t pid)
 {
 	t_list	*now;
 	t_list	*new_client;

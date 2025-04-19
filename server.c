@@ -6,7 +6,7 @@
 /*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:27:35 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/19 14:29:50 by lenovo           ###   ########.fr       */
+/*   Updated: 2025/04/19 14:51:01 by lenovo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_list	*g_clients;
 
-void	restore_symbols(int signum, t_list *client, t_data **data)
+static void	restore_symbols(int signum, t_list *client, t_data **data)
 {
 	*data = (t_data *)((client)->content);
 	(*data)->time = 0;
@@ -23,7 +23,7 @@ void	restore_symbols(int signum, t_list *client, t_data **data)
 	(*data)->bit_count++;
 }
 
-void	signal_handler(int signum, siginfo_t *info, void *context)
+static void	signal_handler(int signum, siginfo_t *info, void *context)
 {
 	t_list	*client;
 	t_data	*data;
@@ -50,7 +50,7 @@ void	signal_handler(int signum, siginfo_t *info, void *context)
 	}
 }
 
-void	print_timeout_and_clear(t_list *cli)
+static void	print_timeout_and_clear(t_list *cli)
 {
 	ft_putstr_fd("\nTimeout for PID ", 1);
 	ft_putnbr_fd(((t_data *)cli->content)->cid, 1);
@@ -58,7 +58,7 @@ void	print_timeout_and_clear(t_list *cli)
 	ft_lstdelone(cli, clear_content);
 }
 
-void	dead_inactive_clients(void)
+static void	dead_inactive_clients(void)
 {
 	t_list		*cli;
 	t_list		*prev;
