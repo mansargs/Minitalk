@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mansargs <mansargs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/12 14:21:35 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/19 15:37:25 by lenovo           ###   ########.fr       */
+/*   Created: 2025/04/21 22:15:12 by mansargs          #+#    #+#             */
+/*   Updated: 2025/04/21 22:15:13 by mansargs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@ extern t_list	*g_clients;
 void	clear_content(void *content);
 t_list	*get_client(const pid_t pid);
 int		printing_behavior(t_list **client_ptr);
+void	dead_inactive_clients(void);
 
 #endif

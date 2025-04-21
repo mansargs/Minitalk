@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mansargs <mansargs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/12 14:27:35 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/19 14:51:01 by lenovo           ###   ########.fr       */
+/*   Created: 2025/04/21 22:15:06 by mansargs          #+#    #+#             */
+/*   Updated: 2025/04/21 22:15:07 by mansargs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,54 +50,31 @@ static void	signal_handler(int signum, siginfo_t *info, void *context)
 	}
 }
 
-static void	print_timeout_and_clear(t_list *cli)
+void	configure(struct sigaction *sa)
 {
-	ft_putstr_fd("\nTimeout for PID ", 1);
-	ft_putnbr_fd(((t_data *)cli->content)->cid, 1);
-	write(1, "\n", 1);
-	ft_lstdelone(cli, clear_content);
-}
+	pid_t	server;
 
-static void	dead_inactive_clients(void)
-{
-	t_list		*cli;
-	t_list		*prev;
-
-	cli = g_clients;
-	prev = NULL;
-	while (cli)
-	{
-		if (((t_data *)cli->content)->time > 150)
-		{
-			if (prev)
-				prev->next = cli->next;
-			else
-				g_clients = cli->next;
-			print_timeout_and_clear(cli);
-			if (prev)
-				cli = prev->next;
-			else
-				cli = g_clients;
-			continue ;
-		}
-		prev = cli;
-		cli = cli->next;
-	}
-}
-
-int	main(void)
-{
-	struct sigaction	sa;
-	pid_t				server;
-	t_list				*cli;
-
-	sa.sa_flags = SA_SIGINFO;
-	sa.sa_sigaction = signal_handler;
-	sigemptyset(&sa.sa_mask);
+	sa->sa_flags = SA_SIGINFO;
+	sa->sa_sigaction = signal_handler;
+	sigemptyset(&sa->sa_mask);
 	server = getpid();
 	ft_putstr_fd("Server PID ", 1);
 	ft_putnbr_fd(server, 1);
 	ft_putchar_fd('\n', 1);
+}
+
+int	main(int argc, char *argv[])
+{
+	struct sigaction	sa;
+	t_list				*cli;
+
+	(void) argv;
+	if (argc != 1)
+	{
+		ft_putstr_fd("Shouldn't take arguments", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
+	configure(&sa);
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	while (1)
@@ -112,4 +89,5 @@ int	main(void)
 		dead_inactive_clients();
 		pause();
 	}
+	return (EXIT_SUCCESS);
 }

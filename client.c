@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lenovo <lenovo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mansargs <mansargs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/12 00:34:18 by lenovo            #+#    #+#             */
-/*   Updated: 2025/04/19 15:17:12 by lenovo           ###   ########.fr       */
+/*   Created: 2025/04/21 22:14:40 by mansargs          #+#    #+#             */
+/*   Updated: 2025/04/21 22:14:41 by mansargs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ static void	send_bit(const pid_t server, const char bit)
 		kill (server, SIGUSR2);
 	if (errno == ESRCH)
 	{
-		ft_putstr_fd("Unfortunately, the connection to the\
-					 server was lost.\n", STDERR_FILENO);
+		ft_putstr_fd("Unfortunately, the connection to the "
+			"server was lost.\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
 }
